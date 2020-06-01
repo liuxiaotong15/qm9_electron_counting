@@ -48,7 +48,8 @@ def check_ucfc_by_electron_counting(atoms, del_idx, ucfc_tag_lst):
             for j in range(i+1, len(atoms)):
                 if i==del_idx or j==del_idx:
                     continue
-                elif atoms.get_distance(i, j) < (bond_cutoff[atoms[i].symbol] + bond_cutoff[atoms[j].symbol])/2 and \
+                # elif atoms.get_distance(i, j) < (bond_cutoff[atoms[i].symbol] + bond_cutoff[atoms[j].symbol])/2 and \
+                elif atoms.get_distance(i, j) < (ucfc_cutoff[atoms[i].symbol] + ucfc_cutoff[atoms[j].symbol])/2 and \
                         electron_cnt[i] < full_cnt[atoms[i].symbol] and \
                         electron_cnt[j] < full_cnt[atoms[j].symbol]:
                     electron_cnt[i] += 1
