@@ -86,8 +86,8 @@ if __name__ == '__main__':
         tag_lst = tag_ucfc(atoms, del_atom_idx)
         total_cnt += len(tag_lst)
         err_cnt += check_ucfc_by_electron_counting(atoms, del_atom_idx, tag_lst)
-        if err_cnt != 0:
-            break
+        # if err_cnt != 0:
+        #     break
         # if row.id % 100 == 0:
         #     print('error count, total count: ', err_cnt, total_cnt)
     bar.finish()
