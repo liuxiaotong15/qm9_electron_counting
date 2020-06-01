@@ -46,7 +46,7 @@ def check_ucfc_by_electron_counting(atoms, del_idx, ucfc_tag_lst):
             for j in range(i+1, len(atoms)):
                 if i==del_idx or j==del_idx:
                     continue
-                elif atoms.get_distance(i, j) < max(ucfc_cutoff[atoms[i].symbol], ucfc_cutoff[atoms[j].symbol]) and \
+                elif atoms.get_distance(i, j) < (ucfc_cutoff[atoms[i].symbol] + ucfc_cutoff[atoms[j].symbol])/2 and \
                         electron_cnt[i] < full_cnt[atoms[i].symbol] and \
                         electron_cnt[j] < full_cnt[atoms[j].symbol]:
                     electron_cnt[i] += 1
@@ -58,15 +58,19 @@ def check_ucfc_by_electron_counting(atoms, del_idx, ucfc_tag_lst):
             break
     err_cnt = 0
     for i in range(len(atoms)):
+        if i == del_idx:
+            continue
         if electron_cnt[i] != full_cnt[atoms[i].symbol] and ucfc_tag_lst[i] == 1:
             err_cnt += 1
         elif electron_cnt[i] == full_cnt[atoms[i].symbol] and ucfc_tag_lst[i] == 0:
             err_cnt += 1
         else:
             pass
-    # if err_cnt != 0:
-    #     print('-' * 100)
-    #     print(electron_cnt, ucfc_tag_lst, err_cnt)
+    if err_cnt != 0:
+        print('-' * 100)
+        print(electron_cnt, ucfc_tag_lst, err_cnt)
+        print(del_idx)
+        view(atoms)
     return err_cnt
 
 if __name__ == '__main__':
@@ -80,6 +84,8 @@ if __name__ == '__main__':
         tag_lst = tag_ucfc(atoms, del_atom_idx)
         total_cnt += len(tag_lst)
         err_cnt += check_ucfc_by_electron_counting(atoms, del_atom_idx, tag_lst)
+        if err_cnt != 0:
+            break
         # if row.id % 100 == 0:
         #     print('error count, total count: ', err_cnt, total_cnt)
     bar.finish()
